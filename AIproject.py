@@ -72,6 +72,21 @@ def melodyRules():
     #Reference: https://www.youtube.com/watch?v=Z8uYdzU_ZR8&list=PLhiuDs71BWGGBbzE_MlcYHlbUWpgeEZey
 
 
+    #Repeated Motifs: We check if the melody repeats short patterns of 3 notes. Repeating motifs are given extra points.
+    motif_counts = {}
+    for i in range(1, len(melody_stream) - 2):
+        motif = melody_stream[i:i + 3]
+        motif_str = str(motif)
+        if motif_str in motif_counts:
+            motif_counts[motif_str] += 1
+        else:
+            motif_counts[motif_str] = 1
+
+    repeated_motif_count = sum(count for count in motif_counts.values() if count > 1)
+    score += repeated_motif_count
+
+    
+
 
 selec = selectKey()
 randomMelody(selec)
