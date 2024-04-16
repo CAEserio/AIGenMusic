@@ -1,4 +1,6 @@
 from midiutil.MidiFile import MIDIFile
+from music21 import *
+
 import random
 midiNotes = {
     'C':61,'C#':62,'D':63,'D#':64,
@@ -43,6 +45,7 @@ def randomMelody(selectedMidiKey):
     channel = 0
     volume = 100
     selectedMidiKey.append("REST")
+    melody = stream.Stream()
    
 
     for i in range(32):
@@ -50,8 +53,25 @@ def randomMelody(selectedMidiKey):
         if noteChoice != "REST":
             mf.addNote(track, channel, noteChoice, i, 1, volume)
     
+
     with open("outputTEST.mid", 'wb') as outf:
         mf.writeFile(outf)
+
+def melodyRules():
+    score = 0
+
+    #Stepwise Motion- Interval Between two consecutive pitch should be no more than a step, limit skips 
+    stepwise_count = 0
+    for i in range(1, len(melody_stream)):
+        if melody_stream[i - 1].isNote and melody_stream[i].isNote:
+            interval_between_notes = interval.Interval(melody_stream[i - 1], melody_stream[i])
+            if interval_between_notes.generic.undirected == 2:
+                stepwise_count += 1
+    if stepwise_count > len(melody_stream) / 2:  # Reward for stepwise motion
+        score += 1
+    #Reference: https://www.youtube.com/watch?v=Z8uYdzU_ZR8&list=PLhiuDs71BWGGBbzE_MlcYHlbUWpgeEZey
+
+
 
 selec = selectKey()
 randomMelody(selec)
