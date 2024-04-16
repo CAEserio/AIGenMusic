@@ -1,4 +1,5 @@
 from midiutil.MidiFile import MIDIFile
+import pygame
 import random
 midiNotes = {
     'C':61,'C#':62,'D':63,'D#':64,
@@ -34,7 +35,7 @@ def selectKey():
 
 
 def randomMelody(selectedMidiKey):
-    mf = MIDIFile(1)     # only 1 track
+    mf = MIDIFile(2)     # only 1 track
     track = 0   # the only track
 
     time = 0    # start at the beginning
@@ -49,12 +50,21 @@ def randomMelody(selectedMidiKey):
         noteChoice = random.choice(selectedMidiKey)
         if noteChoice != "REST":
             mf.addNote(track, channel, noteChoice, i, 1, volume)
-    
+        pass#write logic for creating chords start off with major chords
     with open("outputTEST.mid", 'wb') as outf:
         mf.writeFile(outf)
 
 selec = selectKey()
 randomMelody(selec)
+
+freq = 44100    # audio CD quality
+bitsize = -16   # unsigned 16 bit
+channels = 2    # 1 is mono, 2 is stereo
+buffer = 1024    # number of samples
+pygame.mixer.init(freq, bitsize, channels, buffer)
+pygame.mixer.music.load("outputTEST.mid")
+pygame.mixer.music.play()
+
 
 #Start on I/VII or V
 #end on I/VII
