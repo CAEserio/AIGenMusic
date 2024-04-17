@@ -48,13 +48,19 @@ def randomMelody(selectedMidiKey):
     selectedMidiKey.append("REST")
     melody = stream.Stream()
    
-
+    mf.addNote(1,channel,selectedMidiKey[0],0,4,volume)
+    mf.addNote(1,channel,selectedMidiKey[0 + 3],0,4,volume)
+    mf.addNote(1,channel,selectedMidiKey[0 + 3 + 3],0,4,volume)
     for i in range(32):
         noteChoice = random.choice(selectedMidiKey)
         if noteChoice != "REST":
             mf.addNote(track, channel, noteChoice, i, 1, volume)
-        pass#write logic for creating chords start off with major chords
-    
+
+    for i in range(4,34,4):
+        chordChoice = random.randint(1,6)
+        mf.addNote(1,channel,selectedMidiKey[chordChoice],i,4,volume)
+        mf.addNote(1,channel,selectedMidiKey[(chordChoice+3) %8],i,4,volume)
+        mf.addNote(1,channel,selectedMidiKey[(chordChoice+3 +3) %8],i,4,volume)
 
     with open("outputTEST.mid", 'wb') as outf:
         mf.writeFile(outf)
