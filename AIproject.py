@@ -1,5 +1,7 @@
 from midiutil.MidiFile import MIDIFile
 import pygame
+from music21 import *
+
 import random
 midiNotes = {
     'C':61,'C#':62,'D':63,'D#':64,
@@ -44,6 +46,7 @@ def randomMelody(selectedMidiKey):
     channel = 0
     volume = 100
     selectedMidiKey.append("REST")
+    melody = stream.Stream()
    
 
     for i in range(32):
@@ -51,8 +54,41 @@ def randomMelody(selectedMidiKey):
         if noteChoice != "REST":
             mf.addNote(track, channel, noteChoice, i, 1, volume)
         pass#write logic for creating chords start off with major chords
+    
+
     with open("outputTEST.mid", 'wb') as outf:
         mf.writeFile(outf)
+
+def melodyRules():
+    score = 0
+
+    #Stepwise Motion- Interval Between two consecutive pitch should be no more than a step, limit skips 
+    stepwise_count = 0
+    for i in range(1, len(melody_stream)):
+        if melody_stream[i - 1].isNote and melody_stream[i].isNote:
+            interval_between_notes = interval.Interval(melody_stream[i - 1], melody_stream[i])
+            if interval_between_notes.generic.undirected == 2:
+                stepwise_count += 1
+    if stepwise_count > len(melody_stream) / 2:  # Reward for stepwise motion
+        score += 1
+    #Reference: https://www.youtube.com/watch?v=Z8uYdzU_ZR8&list=PLhiuDs71BWGGBbzE_MlcYHlbUWpgeEZey
+
+
+    #Repeated Motifs: We check if the melody repeats short patterns of 3 notes. Repeating motifs are given extra points.
+    motif_counts = {}
+    for i in range(1, len(melody_stream) - 2):
+        motif = melody_stream[i:i + 3]
+        motif_str = str(motif)
+        if motif_str in motif_counts:
+            motif_counts[motif_str] += 1
+        else:
+            motif_counts[motif_str] = 1
+
+    repeated_motif_count = sum(count for count in motif_counts.values() if count > 1)
+    score += repeated_motif_count
+
+    
+
 
 selec = selectKey()
 randomMelody(selec)
