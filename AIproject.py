@@ -51,6 +51,9 @@ def randomMelody(selectedMidiKey):
     mf.addNote(1,channel,selectedMidiKey[0],0,4,volume)
     mf.addNote(1,channel,selectedMidiKey[0 + 3],0,4,volume)
     mf.addNote(1,channel,selectedMidiKey[0 + 3 + 3],0,4,volume)
+    isItFit = melodyRules(melody)
+    #Returns True or False
+
     for i in range(32):
         noteChoice = random.choice(selectedMidiKey)
         if noteChoice != "REST":
@@ -65,22 +68,29 @@ def randomMelody(selectedMidiKey):
     with open("outputTEST.mid", 'wb') as outf:
         mf.writeFile(outf)
 
-def melodyRules():
+def melodyRules(melody,notes):
     score = 0
 
-    #Stepwise Motion- Interval Between two consecutive pitch should be no more than a step, limit skips 
-    stepwise_count = 0
-    for i in range(1, len(melody_stream)):
-        if melody_stream[i - 1].isNote and melody_stream[i].isNote:
-            interval_between_notes = interval.Interval(melody_stream[i - 1], melody_stream[i])
-            if interval_between_notes.generic.undirected == 2:
-                stepwise_count += 1
-    if stepwise_count > len(melody_stream) / 2:  # Reward for stepwise motion
+    #Tonic - First and Last Notes of the Scale. Melody revolves around the proper use of the tonic
+    #Correct Finish to the Tonic
+    for i in range(1, len(melody)):
+    if melody[i - 1] == notes[-2] and melody[i] == notes[0]:
         score += 1
-    #Reference: https://www.youtube.com/watch?v=Z8uYdzU_ZR8&list=PLhiuDs71BWGGBbzE_MlcYHlbUWpgeEZey
+
+    #Stepwise Motion- Interval Between two consecutive pitch should be no more than a step
+    for i in range(1, len(melody)):
+        interval = abs(get_note_index(melody[i]) - get_note_index(melody[i - 1]))
+        if interval == 1:
+            score += 1
+
+    #Melodic Contour: Checks if there are large jumps betwen notes. Large Jumps are penalized
+    for i in range(1, len(melody)):
+        interval = abs(get_note_index(melody[i]) - get_note_index(melody[i - 1]))
+        if interval > 4 and interval != 1:
+            score -= 2  
 
 
-    #Repeated Motifs: We check if the melody repeats short patterns of 3 notes. Repeating motifs are given extra points.
+    #Repeated Motifs: We check if the melody repeats short patterns of 3 notes. Repeating motifs are awarded
     motif_counts = {}
     for i in range(1, len(melody_stream) - 2):
         motif = melody_stream[i:i + 3]
@@ -90,10 +100,14 @@ def melodyRules():
         else:
             motif_counts[motif_str] = 1
 
-    repeated_motif_count = sum(count for count in motif_counts.values() if count > 1)
+    repeated_motif_count = sum(count for count in motif_counts.values() if count > 1) 
     score += repeated_motif_count
 
-    
+    if score > 10:
+        return true
+    else:
+        return false
+
 
 
 selec = selectKey()
