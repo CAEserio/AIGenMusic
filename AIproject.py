@@ -45,36 +45,64 @@ def randomMelody(selectedMidiKey):
     mf.addTempo(track, time, 180)
     channel = 0
     volume = 100
+    generatedMelody = []
     selectedMidiKey.append("REST")
     melody = stream.Stream()
    
-    mf.addNote(1,channel,selectedMidiKey[0],0,4,volume)
-    mf.addNote(1,channel,selectedMidiKey[0 + 3],0,4,volume)
-    mf.addNote(1,channel,selectedMidiKey[0 + 3 + 3],0,4,volume)
-    isItFit = melodyRules(melody)
+    
+    #isItFit = melodyRules(melody)
     #Returns True or False
 
     for i in range(32):
         noteChoice = random.choice(selectedMidiKey)
         if noteChoice != "REST":
-            mf.addNote(track, channel, noteChoice, i, 1, volume)
+            #mf.addNote(track, channel, noteChoice, i, 1, volume)
+            generatedMelody.append(noteChoice)
+        else:
+            generatedMelody.append("REST")
+    
+    return generatedMelody
 
+def mutate(generatedMelody,selectedMidiKey):
+    mutationRate = 10
+    for i in range(len(generatedMelody)):
+        mutation = random.randint(0,10)
+        if (mutation == mutationRate):
+            generatedMelody[i] = random.choice(selectedMidiKey)
+    
+def printToScore(melody,selectedMidiKey,num):
+    mf = MIDIFile(2)     # only 1 track
+    track = 0   # the only track
+
+    time = 0    # start at the beginning
+    mf.addTrackName(track, time, "Sample Track")
+    mf.addTempo(track, time, 180)
+    channel = 0
+    volume = 100
+
+    mf.addNote(1,channel,selectedMidiKey[0],0,4,volume)
+    mf.addNote(1,channel,selectedMidiKey[0 + 3],0,4,volume)
+    mf.addNote(1,channel,selectedMidiKey[0 + 3 + 3],0,4,volume)
+    for i in range(len(melody)):
+        if (melody[i] != "REST"):
+            mf.addNote(track,channel,melody[i],i,1,volume)
+    
     for i in range(4,34,4):
         chordChoice = random.randint(1,6)
         mf.addNote(1,channel,selectedMidiKey[chordChoice],i,4,volume)
         mf.addNote(1,channel,selectedMidiKey[(chordChoice+3) %8],i,4,volume)
         mf.addNote(1,channel,selectedMidiKey[(chordChoice+3 +3) %8],i,4,volume)
 
-    with open("outputTEST.mid", 'wb') as outf:
+    with open("outputTEST"+str(num)+".mid", 'wb') as outf:
         mf.writeFile(outf)
-
+            
 def melodyRules(melody,notes):
     score = 0
 
     #Tonic - First and Last Notes of the Scale. Melody revolves around the proper use of the tonic
     #Correct Finish to the Tonic
     for i in range(1, len(melody)):
-    if melody[i - 1] == notes[-2] and melody[i] == notes[0]:
+     if melody[i - 1] == notes[-2] and melody[i] == notes[0]:
         score += 1
 
     #Stepwise Motion- Interval Between two consecutive pitch should be no more than a step
@@ -111,17 +139,65 @@ def melodyRules(melody,notes):
 
 
 selec = selectKey()
-randomMelody(selec)
+
+melody = randomMelody(selec)
+#print(melody)
+#mutate(melody,selec)
+#print(melody)
+printToScore(melody,selec,1)
+clock = pygame.time.Clock()
+melody2 = randomMelody(selec)
+printToScore(melody2,selec,2)
+
+melody3 = randomMelody(selec)
+printToScore(melody3,selec,3)
+
+melody4 = randomMelody(selec)
+printToScore(melody4,selec,4)
+
+melody5 = randomMelody(selec)
+printToScore(melody5,selec,5)
 
 freq = 44100    # audio CD quality
 bitsize = -16   # unsigned 16 bit
 channels = 2    # 1 is mono, 2 is stereo
 buffer = 1024    # number of samples
+
 pygame.mixer.init(freq, bitsize, channels, buffer)
-pygame.mixer.music.load("outputTEST.mid")
+pygame.mixer.music.load("outputTEST1.mid")
 pygame.mixer.music.play()
+print("playing melody1")
 
+while pygame.mixer.music.get_busy():
+    clock.tick(30)
 
+pygame.mixer.music.load("outputTEST2.mid")
+pygame.mixer.music.play()
+print("playing melody2")
+
+while pygame.mixer.music.get_busy():
+    clock.tick(30)
+
+pygame.mixer.music.load("outputTEST3.mid")
+pygame.mixer.music.play()
+print("playing melody3")
+
+while pygame.mixer.music.get_busy():
+    clock.tick(30)
+
+pygame.mixer.music.load("outputTEST4.mid")
+pygame.mixer.music.play()
+print("playing melody4")
+
+while pygame.mixer.music.get_busy():
+    clock.tick(30)
+
+pygame.mixer.music.load("outputTEST5.mid")
+pygame.mixer.music.play()
+print("playing melody5")
+
+while pygame.mixer.music.get_busy():
+    clock.tick(30)
 #Start on I/VII or V
 #end on I/VII
 #Stepwise is preffered
