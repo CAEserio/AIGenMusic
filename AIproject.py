@@ -235,9 +235,7 @@ for i in range(5):
     mutation5 = mutate(melodyToMutate,selec)
     print(mutation5)
     printToScore(melody,selec,"mutation5")
-
-    print("playing melody1")
-
+    
     while pygame.mixer.music.get_busy():
         clock.tick(30)
 
