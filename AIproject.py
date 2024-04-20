@@ -1,6 +1,6 @@
 from midiutil.MidiFile import MIDIFile
 import pygame
-
+import os
 import random
 midiNotes = {
     'C':61,'C#':62,'D':63,'D#':64,
@@ -13,7 +13,6 @@ notes = ['C','C#','D','D#',
          'G#','A','A#','B',]
 
 keyPattern = [2,2,1,2,2,2,1]
-
 
 
 def selectKey():
@@ -238,6 +237,7 @@ match melodicChoice:
         melodyToMutate = melody4
     case "5":
         melodyToMutate = melody5
+melodicChoice = None
 for i in range(3):
     mutation1 = mutate(melodyToMutate,selec)
     while (not melodyRules(mutation1,selec)):
@@ -320,6 +320,8 @@ for i in range(3):
             melodyToMutate = mutation4
         case "5":
             melodyToMutate = mutation5
+print("your final melody chosen is" + str(melodyToMutate))
+os.startfile("outputTESTmutation"+str(melodicChoice)+"generation3"+".mid")
 #print(melody)
 #mutate(melody,selec)
 #print(melody)
