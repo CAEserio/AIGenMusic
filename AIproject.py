@@ -1,6 +1,5 @@
 from midiutil.MidiFile import MIDIFile
 import pygame
-from music21 import *
 
 import random
 midiNotes = {
