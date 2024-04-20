@@ -33,6 +33,12 @@ def selectKey():
     for note in selectedKeySig:
         midiKeySig.append(midiNotes[note])
 
+    for value in range(len(midiKeySig)):
+        pass
+        #midiKeySig.append(midiKeySig[value] - 12)
+        #midiKeySig.append(midiKeySig[value] + 12)
+        #midiKeySig.append(midiKeySig[value] + 24)
+        #midiKeySig.append(midiKeySig[value] -24)
     return midiKeySig
 
 
@@ -64,11 +70,12 @@ def randomMelody(selectedMidiKey):
     return generatedMelody
 
 def mutate(generatedMelody,selectedMidiKey):
-    mutationRate = 10
+    mutationRate = 5
     for i in range(len(generatedMelody)):
         mutation = random.randint(0,10)
-        if (mutation == mutationRate):
+        if (mutation  < mutationRate):
             generatedMelody[i] = random.choice(selectedMidiKey)
+    return generatedMelody
     
 def printToScore(melody,selectedMidiKey,num):
     mf = MIDIFile(2)     # only 1 track
@@ -201,9 +208,84 @@ while pygame.mixer.music.get_busy():
 
 print("Please input the number of the melody you like the best (melody1, melody2, melody3, melody4, melody5)")
 melodicChoice = input()
-
+match melodicChoice:
+    case "1":
+        melodyToMutate = melody
+    case "2":
+        melodyToMutate = melody2
+    case "3":
+        melodyToMutate = melody3
+    case "4":
+        melodyToMutate = melody4
+    case "5":
+        melodyToMutate = melody5
 for i in range(5):
-    pass
-#Start on I/VII or V
+    mutation1 = mutate(melodyToMutate,selec)
+    print(mutation1)
+    printToScore(melody,selec,"mutation1")
+    mutation2 = mutate(melodyToMutate,selec)
+    print(mutation2)
+    printToScore(melody,selec,"mutation2")
+    mutation3 = mutate(melodyToMutate,selec)
+    print(mutation3)
+    printToScore(melody,selec,"mutation3")
+    mutation4 = mutate(melodyToMutate,selec)
+    printToScore(melody,selec,"mutation4")
+    print(mutation4)
+    mutation5 = mutate(melodyToMutate,selec)
+    print(mutation5)
+    printToScore(melody,selec,"mutation5")
+
+    print("playing melody1")
+
+    while pygame.mixer.music.get_busy():
+        clock.tick(30)
+
+    pygame.mixer.music.load("outputTESTmutation1.mid")
+    pygame.mixer.music.play()
+    print("playing mutated melody1")
+
+    while pygame.mixer.music.get_busy():
+        clock.tick(30)
+
+    pygame.mixer.music.load("outputTESTmutation2.mid")
+    pygame.mixer.music.play()
+    print("playing mutated melody2")
+
+    while pygame.mixer.music.get_busy():
+        clock.tick(30)
+    pygame.mixer.music.load("outputTESTmutation3.mid")
+    pygame.mixer.music.play()
+    print("playing mutated melody3")
+
+    while pygame.mixer.music.get_busy():
+        clock.tick(30)
+    pygame.mixer.music.load("outputTESTmutation4.mid")
+    pygame.mixer.music.play()
+    print("playing mutated melody4")
+
+    while pygame.mixer.music.get_busy():
+        clock.tick(30)
+
+    pygame.mixer.music.load("outputTESTmutation5.mid")
+    pygame.mixer.music.play()
+    print("playing mutated melody5")
+
+    while pygame.mixer.music.get_busy():
+        clock.tick(30)
+
+    print("Please input the number of the melody you like the best (melody1, melody2, melody3, melody4, melody5)")
+    melodicChoice = input()
+    match melodicChoice:
+        case "1":
+            melodyToMutate = mutation1
+        case "2":
+            melodyToMutate = mutation2
+        case "3":
+            melodyToMutate = mutation3
+        case "4":
+            melodyToMutate = mutation4
+        case "5":
+            melodyToMutate = mutation5
 #end on I/VII
 #Stepwise is preffered
