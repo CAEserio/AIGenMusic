@@ -198,6 +198,12 @@ print("playing melody5")
 
 while pygame.mixer.music.get_busy():
     clock.tick(30)
+
+print("Please input the number of the melody you like the best (melody1, melody2, melody3, melody4, melody5)")
+melodicChoice = input()
+
+for i in range(5):
+    pass
 #Start on I/VII or V
 #end on I/VII
 #Stepwise is preffered
