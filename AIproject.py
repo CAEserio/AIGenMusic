@@ -114,21 +114,21 @@ def melodyRules(melody,notes):
 
     #Stepwise Motion- Interval Between two consecutive pitch should be no more than a step
     for i in range(1, len(melody)):
-        interval = abs(get_note_index(melody[i]) - get_note_index(melody[i - 1]))
+        interval = abs(melody[i] - melody[i - 1])
         if interval == 1:
             score += 1
 
     #Melodic Contour: Checks if there are large jumps betwen notes. Large Jumps are penalized
     for i in range(1, len(melody)):
-        interval = abs(get_note_index(melody[i]) - get_note_index(melody[i - 1]))
+        interval = abs(melody[i] - melody[i - 1])
         if interval > 4 and interval != 1:
             score -= 2  
 
 
     #Repeated Motifs: We check if the melody repeats short patterns of 3 notes. Repeating motifs are awarded
     motif_counts = {}
-    for i in range(1, len(melody_stream) - 2):
-        motif = melody_stream[i:i + 3]
+    for i in range(1, len(melody) - 2):
+        motif = melody[i:i + 3]
         motif_str = str(motif)
         if motif_str in motif_counts:
             motif_counts[motif_str] += 1
@@ -139,9 +139,9 @@ def melodyRules(melody,notes):
     score += repeated_motif_count
 
     if score > 10:
-        return true
+        return  True
     else:
-        return false
+        return False
 
 
 
@@ -235,7 +235,7 @@ for i in range(5):
     mutation5 = mutate(melodyToMutate,selec)
     print(mutation5)
     printToScore(melody,selec,"mutation5")
-    
+
     while pygame.mixer.music.get_busy():
         clock.tick(30)
 
@@ -285,5 +285,3 @@ for i in range(5):
             melodyToMutate = mutation4
         case "5":
             melodyToMutate = mutation5
-#end on I/VII
-#Stepwise is preffered
