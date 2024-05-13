@@ -102,7 +102,7 @@ def printToScore(melody,selectedMidiKey,num,selectedTempo):
     with open("outputTEST"+str(num)+".mid", 'wb') as outf:
         mf.writeFile(outf)
             
-def melodyRules(melody,notes):
+def melodyRules(melody,notes,add):
     score = 0
 
     #Tonic - First and Last Notes of the Scale. Melody revolves around the proper use of the tonic
@@ -143,7 +143,7 @@ def melodyRules(melody,notes):
     repeated_motif_count = sum(count for count in motif_counts.values() if count > 1) 
     score += repeated_motif_count
 
-    if score >= 2:
+    if score >= (2 + add):
         return  True
     else:
         return False
@@ -153,20 +153,20 @@ def melodyRules(melody,notes):
 selec = selectKey()
 tempo = int(input("Please select the tempo you want:"))
 melody = randomMelody(selec)
-while (not melodyRules(melody,selec)):
+while (not melodyRules(melody,selec,0)):
         mutate(melody,selec)
         print(melody)
 printToScore(melody,selec,1,tempo)
 clock = pygame.time.Clock()
 melody2 = randomMelody(selec)
-while (not melodyRules(melody2,selec)):
+while (not melodyRules(melody2,selec,0)):
         mutate(melody2,selec)
         print(melody2)
 printToScore(melody2,selec,2,tempo)
 
 melody3 = randomMelody(selec)
 
-while (not melodyRules(melody3,selec)):
+while (not melodyRules(melody3,selec,0)):
         mutate(melody3,selec)
         print(melody3)
 printToScore(melody3,selec,3,tempo)
@@ -177,7 +177,7 @@ melody4 = randomMelody(selec)
 printToScore(melody4,selec,4,tempo)
 melody5 = randomMelody(selec)
 
-while (not melodyRules(melody4,selec)):
+while (not melodyRules(melody4,selec,0)):
         mutate(melody4,selec)
         print(melody4)
 
@@ -240,32 +240,32 @@ match melodicChoice:
 melodicChoice = None
 for i in range(3):
     mutation1 = mutate(melodyToMutate,selec)
-    while (not melodyRules(mutation1,selec)):
+    while (not melodyRules(mutation1,selec,i)):
         mutate(mutation1,selec)
         print(mutation1)
     printToScore(melody,selec,1,tempo)
     print(mutation1)
     printToScore(melody,selec,"mutation1" + "generation" + str(i+1),tempo)
     mutation2 = mutate(melodyToMutate,selec)
-    while (not melodyRules(mutation2,selec)):
+    while (not melodyRules(mutation2,selec,i)):
         mutate(mutation2,selec)
         print(mutation2)
     print(mutation2)
     printToScore(melody,selec,"mutation2"+ "generation" + str(i+1),tempo)
     mutation3 = mutate(melodyToMutate,selec)
-    while (not melodyRules(mutation3,selec)):
+    while (not melodyRules(mutation3,selec,i)):
         mutate(mutation3,selec)
         print(mutation3)
     print(mutation3)
     printToScore(melody,selec,"mutation3"+ "generation" + str(i+1),tempo)
     mutation4 = mutate(melodyToMutate,selec)
-    while (not melodyRules(mutation4,selec)):
+    while (not melodyRules(mutation4,selec,i)):
         mutate(mutation4,selec)
         print(mutation4)
     printToScore(melody,selec,"mutation4"+ "generation" + str(i+1),tempo)
     print(mutation4)
     mutation5 = mutate(melodyToMutate,selec)
-    while (not melodyRules(mutation5,selec)):
+    while (not melodyRules(mutation5,selec,i)):
         mutate(mutation5,selec)
         print(mutation5)
     print(mutation5)
