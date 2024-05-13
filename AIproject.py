@@ -143,7 +143,17 @@ def melodyRules(melody,notes,add):
     repeated_motif_count = sum(count for count in motif_counts.values() if count > 1) 
     score += repeated_motif_count
 
-    if score >= (2 + add):
+
+    if melody[0] == notes[0]:
+        score += 1
+    if melody[-1] == notes[0]:
+        score += 1
+    #Reward the resolution from the 7th scale degree to the tonic
+    for i in range(1, len(melody)):
+        if melody[i - 1] == notes[-2] and melody[i] == notes[0]:
+            score += 1
+    
+    if score >= (4 + add):
         return  True
     else:
         return False
