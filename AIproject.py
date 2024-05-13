@@ -46,7 +46,7 @@ def randomMelody(selectedMidiKey):
 
     time = 0    # start at the beginning
     mf.addTrackName(track, time, "Sample Track")
-    mf.addTempo(track, time, 180)
+    mf.addTempo(track, time,180)
     channel = 0
     volume = 100
     generatedMelody = []
@@ -76,13 +76,13 @@ def mutate(generatedMelody,selectedMidiKey):
             generatedMelody[i] = random.choice(selectedMidiKey)
     return generatedMelody
     
-def printToScore(melody,selectedMidiKey,num):
+def printToScore(melody,selectedMidiKey,num,selectedTempo):
     mf = MIDIFile(2)     # only 1 track
     track = 0   # the only track
 
     time = 0    # start at the beginning
     mf.addTrackName(track, time, "Sample Track")
-    mf.addTempo(track, time, 180)
+    mf.addTempo(track, time, selectedTempo)
     channel = 0
     volume = 100
 
@@ -151,37 +151,37 @@ def melodyRules(melody,notes):
 
 
 selec = selectKey()
-
+tempo = int(input("Please select the tempo you want:"))
 melody = randomMelody(selec)
 while (not melodyRules(melody,selec)):
         mutate(melody,selec)
         print(melody)
-printToScore(melody,selec,1)
+printToScore(melody,selec,1,tempo)
 clock = pygame.time.Clock()
 melody2 = randomMelody(selec)
 while (not melodyRules(melody2,selec)):
         mutate(melody2,selec)
         print(melody2)
-printToScore(melody2,selec,2)
+printToScore(melody2,selec,2,tempo)
 
 melody3 = randomMelody(selec)
 
 while (not melodyRules(melody3,selec)):
         mutate(melody3,selec)
         print(melody3)
-printToScore(melody3,selec,3)
+printToScore(melody3,selec,3,tempo)
 
 melody4 = randomMelody(selec)
 
 
-printToScore(melody4,selec,4)
+printToScore(melody4,selec,4,tempo)
 melody5 = randomMelody(selec)
 
 while (not melodyRules(melody4,selec)):
         mutate(melody4,selec)
         print(melody4)
 
-printToScore(melody5,selec,5)
+printToScore(melody5,selec,5,tempo)
 
 freq = 44100    # audio CD quality
 bitsize = -16   # unsigned 16 bit
@@ -243,33 +243,33 @@ for i in range(3):
     while (not melodyRules(mutation1,selec)):
         mutate(mutation1,selec)
         print(mutation1)
-    printToScore(melody,selec,1)
+    printToScore(melody,selec,1,tempo)
     print(mutation1)
-    printToScore(melody,selec,"mutation1" + "generation" + str(i+1))
+    printToScore(melody,selec,"mutation1" + "generation" + str(i+1),tempo)
     mutation2 = mutate(melodyToMutate,selec)
     while (not melodyRules(mutation2,selec)):
         mutate(mutation2,selec)
         print(mutation2)
     print(mutation2)
-    printToScore(melody,selec,"mutation2"+ "generation" + str(i+1))
+    printToScore(melody,selec,"mutation2"+ "generation" + str(i+1),tempo)
     mutation3 = mutate(melodyToMutate,selec)
     while (not melodyRules(mutation3,selec)):
         mutate(mutation3,selec)
         print(mutation3)
     print(mutation3)
-    printToScore(melody,selec,"mutation3"+ "generation" + str(i+1))
+    printToScore(melody,selec,"mutation3"+ "generation" + str(i+1),tempo)
     mutation4 = mutate(melodyToMutate,selec)
     while (not melodyRules(mutation4,selec)):
         mutate(mutation4,selec)
         print(mutation4)
-    printToScore(melody,selec,"mutation4"+ "generation" + str(i+1))
+    printToScore(melody,selec,"mutation4"+ "generation" + str(i+1),tempo)
     print(mutation4)
     mutation5 = mutate(melodyToMutate,selec)
     while (not melodyRules(mutation5,selec)):
         mutate(mutation5,selec)
         print(mutation5)
     print(mutation5)
-    printToScore(melody,selec,"mutation5"+ "generation" + str(i+1))
+    printToScore(melody,selec,"mutation5"+ "generation" + str(i+1),tempo)
 
     while pygame.mixer.music.get_busy():
         clock.tick(30)
